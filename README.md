@@ -25,4 +25,15 @@ Last file for Prometheus is ```04-prometheus-svc.yaml```, that is only a __Kuber
 
 ### Alert Manager
 
+First file ```05-prometheus-alertmanager-configmap.yaml``` is a ConfigMap for __alertmanager.yml__ parameters, such as timers for alerts, type of alerts and receivers. In this part, the Telegram receiver is configured to receive alerts. You need to replace:
+
+```yml
+receivers:
+- name: webhook-telegram
+  webhook_configs:
+    - send_resolved: false
+      url: 'http://prometheus-bot:9087/alert/<Your Telegram Chat ID>'
+```
+
+For more information [Alert Manager Configuration](https://prometheus.io/docs/alerting/latest/configuration/) is your ally.
 
