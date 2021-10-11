@@ -25,7 +25,7 @@ Last file for Prometheus is ```04-prometheus-svc.yaml```, that is only a __Kuber
 
 ### Alert Manager
 
-First file ```05-prometheus-alertmanager-configmap.yaml``` is a ConfigMap for __alertmanager.yml__ parameters, such as timers for alerts, type of alerts and receivers. In this part, the Telegram receiver is configured to receive alerts, so that you need to create Telegram bot with [BotFather](https://t.me/BotFather), it will return your bot token. After that, create a chat group in Telegram
+First file ```05-prometheus-alertmanager-configmap.yaml``` is a ConfigMap for __alertmanager.yml__ parameters, such as timers for alerts, type of alerts and receivers. In this part, the Telegram receiver is configured to receive alerts, so that you need to create Telegram bot with [BotFather](https://t.me/BotFather), it will return your bot token. After that, create a chat group in Telegram and add your bot there, and make the following GET request ```https://api.telegram.org/bot<Your Bot Token>/getUpdates```
 
 Replace ```<Your Telegram Chat ID>``` with the value you got from your bot, _**with everything inside the quotes**_. (Some chat_id's start with a ```-```, in this case, you must also include the ```-``` in the url).
 
