@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-bot
+  namespace: monitoring
+spec:
+  ports:
+    - name: bot-port
+      port: 9087
+      protocol: TCP
+      targetPort: 9087
+  selector:
+    app: telegram-bot 
+  type: "ClusterIP"

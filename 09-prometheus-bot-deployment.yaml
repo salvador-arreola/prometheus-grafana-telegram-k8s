@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-bot
+  namespace: monitoring
+  labels:
+    app: telegram-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegram-bot
+  template:
+    metadata:
+      labels:
+        app: telegram-bot
+    spec:
+      tolerations:
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 0
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 0
+      containers:
+        - name: prometheus-bot
+          image: "salvadorarreola/telegram-prometheus-bot:0.1.0"
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: TZ
+              value: <Your Time Zone>
+          ports:
+            - containerPort: 9087
+          resources:
+            requests:
+              cpu: 100m            
+              memory: 25Mi
+            limits: 
+              cpu: 150m
+              memory: 50Mi
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/telegrambot
+      volumes:
+        - name: config-volume
+          configMap:
+            name: prometheus-bot-config

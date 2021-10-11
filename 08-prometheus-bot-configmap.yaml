@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-bot-config
+  namespace: monitoring
+data:
+  prometheus-bot.yml: |-  
+    telegram_token: "<Your Telegram bot Token>"
+    template_path: "/etc/telegrambot/alert-template.tmpl"
+    time_zone: "<Your Time Zone>"
+    split_token: "|"
+    split_msg_byte: 4096
+  alert-template.tmpl: |-
+    {{if eq .CommonLabels.alertname "High Node Memory" -}}
+    {{ range .Alerts }}
+    Alertname: <b>{{ .Labels.alertname }}</b>
+    Summary: <b>{{ .Annotations.summary }}</b>
+    Node: <b>{{ .Labels.node }}</b>
+    Memory Capacity: <b>{{ .Labels.value }} MiB</b>
+    Severity: <b>{{ .Labels.severity }}</b>
+    Status:  <b>{{ .Status }}</b>
+    {{ end }}
+    {{ end -}}
+    
+    {{if eq .CommonLabels.alertname "High Pod Memory" -}}
+    {{ range .Alerts }}
+    Alertname: <b>{{ .Labels.alertname }}</b>
+    Summary: <b>{{ .Annotations.summary }}</b>
+    Node: <b>{{ .Labels.instance }}</b>
+    Pod: <b>{{ .Labels.pod }}</b>
+    Memory Pod Usage: <b>{{ .Labels.value }} MiB</b>
+    Severity: <b>{{ .Labels.severity }}</b>
+    Status:  <b>{{ .Status }}</b>
+    {{ end }}
+    {{ end -}}
+    
+    {{if eq .CommonLabels.alertname "High Cluster CPU" -}}
+    {{ range .Alerts }}
+    Alertname: <b>{{ .Labels.alertname }}</b>
+    Summary: <b>{{ .Annotations.summary }}</b>
+    CPU Cluster Usage: <b>{{ .Labels.value }} %</b>
+    Severity: <b>{{ .Labels.severity }}</b>
+    Status:  <b>{{ .Status }}</b>
+    {{ end }}
+    {{ end -}}
+    
+    {{if eq .CommonLabels.alertname "High Node CPU" -}}
+    {{ range .Alerts }}
+    Alertname: <b>{{ .Labels.alertname }}</b>
+    Summary: <b>{{ .Annotations.summary }}</b>
+    Node: <b>{{ .Labels.instance }}</b>
+    CPU Node Usage: <b>{{ .Labels.value }} %</b>
+    Severity: <b>{{ .Labels.severity }}</b>
+    Status:  <b>{{ .Status }}</b>
+    {{ end }}
+    {{ end -}}
+        
+    {{if eq .CommonLabels.alertname "Pod CrashLooping" -}}
+    {{ range .Alerts }}
+    Alertname: <b>{{ .Labels.alertname }}</b>
+    Summary: <b>{{ .Annotations.summary }}</b>
+    Namespace: <b>{{ .Labels.namespace }}</b>
+    Pod: <b>{{ .Labels.pod }}</b>
+    Severity: <b>{{ .Labels.severity }}</b>
+    Status:  <b>{{ .Status }}</b>
+    {{ end }}
+    {{ end -}}
+        
+    {{if eq .CommonLabels.alertname "Node Failover" -}}
+    {{ range .Alerts }}
+    Alertname: <b>{{ .Labels.alertname }}</b>
+    Summary: <b>{{ .Annotations.summary }}</b>
+    Node: <b>{{ .Labels.node }}</b>
+    Node Status: <b>{{ .Labels.status }}</b>
+    Severity: <b>{{ .Labels.severity }}</b>
+    Status:  <b>{{ .Status }}</b>
+    {{ end }}
+    {{ end -}}
+    
+    {{if eq .CommonLabels.alertname "Swap Memory" -}}
+    {{ range .Alerts }}
+    Alertname: <b>{{ .Labels.alertname }}</b>
+    Summary: <b>{{ .Annotations.summary }}</b>
+    Node: <b>{{ .Labels.instance }}</b>
+    Swap Memory Value: <b>{{ .Labels.value }} MiB</b>
+    Severity: <b>{{ .Labels.severity }}</b>
+    Status:  <b>{{ .Status }}</b>
+    {{ end }}
+    {{ end -}}
+    
+    {{if eq .CommonLabels.alertname "High Disk Space" -}}
+    {{ range .Alerts }}
+    Alertname: <b>{{ .Labels.alertname }}</b>
+    Summary: <b>{{ .Annotations.summary }}</b>
+    Node: <b>{{ .Labels.instance }}</b>
+    Percentage Disk Usage: <b>{{ .Labels.value }} %</b>
+    Severity: <b>{{ .Labels.severity }}</b>
+    Status:  <b>{{ .Status }}</b>
+    {{ end }}
+    {{ end -}}

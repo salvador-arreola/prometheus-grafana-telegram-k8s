@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      name: grafana
+      labels:
+        app: grafana
+    spec:
+      tolerations:
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 0
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 0
+      containers:
+        - name: grafana
+          image: grafana/grafana:8.1.3
+          env:
+          - name: TZ
+            value: <Your Time Zone>
+          - name: GF_SECURITY_ADMIN_USER
+            valueFrom:
+              secretKeyRef:
+                name: grafana-credentials
+                key: user
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: grafana-credentials
+                key: password
+          ports:
+          - name: grafana
+            containerPort: 3000
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits: 
+              cpu: 150m
+              memory: 150Mi
+          volumeMounts:
+            - mountPath: /usr/share/grafana/public/dashboards
+              name: grafana-storage
+            - mountPath: /etc/grafana/provisioning/datasources
+              name: grafana-datasources
+              readOnly: false
+      volumes:
+        - name: grafana-storage
+          configMap:
+              name: grafana-dashboard
+        - name: grafana-datasources
+          configMap:
+              name: grafana-datasources
