@@ -12,5 +12,5 @@ The first file ```00-prometheus-namespace.yaml```, like his name indicate, only 
 
 For ```01-prometheus-cluster-role.yaml``` file, gives to Prometheus necessary permissions access to Kubernetes cluster metrics.
 
-In file ```02-prometheus-configmap.yaml``` has important configurations of this implementation, such as metrics name and alerts. First configuration is   __prometheus.rules__
+In file ```02-prometheus-configmap.yaml``` has important configurations of this implementation, such as metrics name and alerts. First configuration is   __prometheus.rules__, in this part you can add custom rules for Alert Manager, there are example rules such as _High Node Memory_, _High Memory Usage in Pod_, _High Node CPU_, _Node Failover_, _etc_., all based in kubernetes metrics. For more information about how this rules works, consult [Prometheus Alerting](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) documentation. Second configuration is __prometheus.yml__, that contains values such as scrap interval, evaluation time of rules, path location of prometheus.rules and where is allocated Alert Manager (in this case, service). 
 
