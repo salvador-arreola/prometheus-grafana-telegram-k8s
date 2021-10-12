@@ -25,9 +25,9 @@ Last file for Prometheus is ```04-prometheus-svc.yaml```, that is only a __Kuber
 
 ### Alert Manager
 
-First file ```05-prometheus-alertmanager-configmap.yaml``` is a ConfigMap for __alertmanager.yml__ parameters, such as timers for alerts, type of alerts and receivers. In this part, the Telegram receiver is configured to receive alerts, so that you need to create Telegram bot with [BotFather](https://t.me/BotFather), it will return your bot token. After that, create a chat group in Telegram and add your bot there, and make the following GET request ```https://api.telegram.org/bot<Your Bot Token>/getUpdates```
+First file ```05-prometheus-alertmanager-configmap.yaml``` is a ConfigMap for __alertmanager.yml__ parameters, such as timers for alerts, type of alerts and receivers. In this part, the Telegram receiver is configured to receive alerts, so that you need to create Telegram bot with [BotFather](https://t.me/BotFather), it will return your bot token. After that, create a chat group in Telegram and add your bot there, and make the following GET request ```https://api.telegram.org/bot<Your Bot Token>/getUpdates``` and you will obtain your Chat ID.
 
-Replace ```<Your Telegram Chat ID>``` with the value you got from your bot, _**with everything inside the quotes**_. (Some chat_id's start with a ```-```, in this case, you must also include the ```-``` in the url).
+Replace ```<Your Telegram Chat ID>``` with the value you got from your bot, _**with everything inside the quotes**_. (Some Chat ID's start with a ```-```, in this case, you must also include the ```-``` in the url).
 
 The URL ```http://prometheus-bot:9087``` is a __Kubernetes ClusterIP__ service and behind it is a deployment with a Prometheus Bot that recive alerts and send to chat group in Telegram.
 
@@ -40,4 +40,11 @@ receivers:
 ```
 
 For more information [Alert Manager Configuration](https://prometheus.io/docs/alerting/latest/configuration/) is your ally.
+
+Next file, ```06-prometheus-alertmanager-deployment.yaml``` is deployment for Alert Manager, using ```v0.23.0 version``` . You need to change value ```<Your Time Zone>``` of environment variable __TZ__ too or just delete it.
+
+Last file, ```07-prometheus-alertmanager-svc.yaml``` is a __Kubernetes ClusterIP__ service, because in this case, no need to expose deployment to the world, only Prometheus can access to this service.
+
+
+
 
