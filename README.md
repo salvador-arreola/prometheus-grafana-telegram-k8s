@@ -45,6 +45,31 @@ Next file, ```06-prometheus-alertmanager-deployment.yaml``` is deployment for Al
 
 Last file, ```07-prometheus-alertmanager-svc.yaml``` is a __Kubernetes ClusterIP__ service, because in this case, no need to expose deployment to the world, only Prometheus can access to this service.
 
+### Telegram Prometheus Bot
+
+This part is based on [prometheus_bot](https://github.com/inCaller/prometheus_bot) by inCaller, with a little changes, such as the Dockerfile. 
+
+```Dockerfile
+FROM golang:1.17.1-alpine3.14 as builder
+RUN apk add --no-cache git ca-certificates make tzdata
+COPY . /app
+RUN cd /app && \
+    go get -d -v && \
+    CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -o prometheus_bot
+
+FROM alpine:3.13.6
+COPY --from=builder /app/prometheus_bot /
+RUN apk add --no-cache ca-certificates tzdata tini
+RUN mkdir /etc/telegrambot/
+USER nobody
+EXPOSE 9087
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["/prometheus_bot","-c","/etc/telegrambot/prometheus-bot.yml","-d"]
+```
+As you can see, golang and alpine version has been updated, a directory ```/etc/telegrambot/``` has been created and flags has been added in CMD, __-c__ for path of config file and __-d__ for detach. Docker image has been uploaded in Docker Hub as ```salvadorarreola/telegram-prometheus-bot```. If you want to upload your own Docker image, clone Github repository [prometheus_bot](https://github.com/inCaller/prometheus_bot) and update Dockerfile as show before __*(you can change directory and config file names, but you need to update configmap and deployment too)*__.
+
+In this file, ```08-prometheus-bot-configmap.yaml``` 
+
 
 
 
