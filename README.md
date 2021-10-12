@@ -66,9 +66,17 @@ EXPOSE 9087
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/prometheus_bot","-c","/etc/telegrambot/prometheus-bot.yml","-d"]
 ```
-As you can see, golang and alpine version has been updated, a directory ```/etc/telegrambot/``` has been created and flags has been added in CMD, __-c__ for path of config file and __-d__ for detach. Docker image has been uploaded in Docker Hub as ```salvadorarreola/telegram-prometheus-bot```. If you want to upload your own Docker image, clone Github repository [prometheus_bot](https://github.com/inCaller/prometheus_bot) and update Dockerfile as show before __*(you can change directory and config file names, but you need to update configmap and deployment too)*__.
+As you can see, golang and alpine version has been updated, a directory ```/etc/telegrambot/``` has been created and flags has been added in CMD, __-c__ for path of config file (named ```prometheus-bot.yml```) and __-d__ for debug. Docker image has been uploaded in Docker Hub as ```salvadorarreola/telegram-prometheus-bot```. If you want to upload your own Docker image, clone Github repository [prometheus_bot](https://github.com/inCaller/prometheus_bot) and update Dockerfile as show before __*(you can change directory and config file names, but you need to update configmap and deployment too)*__.
 
-In this file, ```08-prometheus-bot-configmap.yaml``` 
+In this file, ```08-prometheus-bot-configmap.yaml```, describes two config files, __prometheus-bot.yml__ and __alert-template.tmpl__. First of them, __prometheus-bot.yml__, is for Bot Configuration options, such as template path, time zone, telegram token, etc. As you can see, you need to replace ```<Your Telegram bot Token>```
+
+```yml
+telegram_token: "<Your Telegram bot Token>"
+template_path: "/etc/telegrambot/alert-template.tmpl"
+time_zone: "<Your Time Zone>"
+split_token: "|"
+split_msg_byte: 4096
+```
 
 
 
