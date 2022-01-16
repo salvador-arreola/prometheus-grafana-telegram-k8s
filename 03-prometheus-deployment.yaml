@@ -24,7 +24,7 @@ spec:
         tolerationSeconds: 0
       containers:
         - name: prometheus
-          image: prom/prometheus:v2.29.2
+          image: prom/prometheus:main
           args:
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"
