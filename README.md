@@ -105,7 +105,7 @@ Next file ```12-prometheus-grafana-secret.yaml``` is __Kubernetes Secret__ that 
 
 Next, a __Kubernetes Deployment__ ```13-prometheus-grafana-deployment.yaml```, using ConfigMap to mount configuration files and Secret to set the user and password. Finally (I promise you it's the last time) replace value ```<Your Time Zone>```.
 
-Last file is a __Kubernetes NodePort__ service to expose port 3000 of Grafana in port 31000 (or any other port that you want).
+Last file is a __Kubernetes NodePort__ service ```14-prometheus-grafana-svc.yaml``` to expose port 3000 of Grafana in port 31000 (or any other port that you want).
 
 ### KSM
 
